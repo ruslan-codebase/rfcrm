@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "rfcrm"
+version = "0.1.0"
+description = "api based crm/cms"
+authors = ["Ruslan Filimonov <ruslan.filimonov.main@mail.ru>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.104.1"
+sqlmodel = "^0.0.12"
+uuid6 = "^2023.5.2"
+alembic = "^1.12.1"
+pytest = "^7.4.3"
+pytest-asyncio = "^0.21.1"
+asyncpg = "^0.29.0"
+uvicorn = "^0.24.0.post1"
+httpx = "^0.25.2"
+aiosqlite = "^0.19.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
