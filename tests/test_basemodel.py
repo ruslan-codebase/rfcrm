@@ -1,5 +1,5 @@
 from pytest import mark
-from uuid6 import uuid6, UUID
+from uuid6 import UUID
 from datetime import datetime
 from app.models.base_model import BaseModel
 

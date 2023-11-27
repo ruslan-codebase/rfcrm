@@ -3,9 +3,12 @@ from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlmodel import SQLModel, create_engine
-from sqlmodel.ext.asyncio.session import AsyncEngine
+from sqlalchemy.ext.asyncio import AsyncEngine
 from alembic import context
 from app.settings import settings
+
+# import sqlmodel models
+from app.models.company import Company
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -65,7 +68,6 @@ async def run_async_migrations() -> None:
     and associate a connection with the context.
 
     """
-
     connectable = AsyncEngine(
         create_engine(
             settings.postgres_dsn,
