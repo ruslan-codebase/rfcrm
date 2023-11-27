@@ -5,6 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=apidb
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "8000:8000"
     volumes:
@@ -22,3 +27,11 @@ services:
         "app.main:app",
         "--reload",
       ]
+  apidb:
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}

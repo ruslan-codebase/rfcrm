@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-
+from app.db import db
 
 app = FastAPI(
     title = "RFCRM",
