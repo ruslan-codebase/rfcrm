@@ -12,7 +12,8 @@ test_db = InMemSqliteDatabase()
 @fixture(scope="function")
 async def async_session() -> AsyncGenerator[AsyncSession, None]:
     await test_db.init_db()
-    yield test_db.get_session()
+    async for test_session in test_db.get_session():
+        yield test_session
     await test_db.destroy_db()
 
 
@@ -22,3 +23,4 @@ async def async_client() -> AsyncGenerator[AsyncClient, None]:
     app.dependency_overrides[db.get_session] = test_db.get_session
     async with AsyncClient(app=app, base_url="http://testfastapi.localhost") as client:
         yield client
+    await test_db.destroy_db()
