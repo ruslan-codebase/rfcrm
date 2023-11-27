@@ -1,5 +1,6 @@
 from pytest import mark
 from tests.fixtures import async_session
+from uuid6 import uuid6
 from app.models.company import Company, CompanyIn, CompanyUpdate
 from app.services.company_service import CompanyService
 
@@ -37,6 +38,22 @@ async def test_get_company_by_id(async_session):
         assert result.name == company.name
         assert result.hh_employer_id == company.hh_employer_id
         assert result == company
+
+@mark.asyncio
+async def test_company_not_found(async_session):
+    async for s in async_session:
+        service = CompanyService(s)
+        fakeid = uuid6()
+
+        get_result = await service.get_by_id(fakeid)
+        assert get_result is None
+
+        delete_result = await service.delete(fakeid)
+        assert delete_result is None
+
+        company_update = CompanyUpdate(name="newname")
+        update_result = await service.update(fakeid, company_update)
+        assert update_result is None
 
 @mark.asyncio
 async def test_get_companies(async_session):
@@ -90,7 +107,8 @@ async def test_delete_company(async_session):
         result1 = await service.get_by_id(company.id)
         assert result1 == company
 
-        await service.delete(company.id)
+        delete_result = await service.delete(company.id)
+        assert delete_result == company.id
 
         result2 = await service.get_by_id(company.id)
         assert result2 is None
