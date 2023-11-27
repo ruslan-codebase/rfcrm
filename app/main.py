@@ -7,10 +7,6 @@ app = FastAPI(
     version = "0.1.0",
 )
 
-app.on_event("startup")
-async def on_startup():
-    await db.init_db()
-
 @app.get("/")
 async def api_root():
     return {"message": "Welcome to RFCRM"}
