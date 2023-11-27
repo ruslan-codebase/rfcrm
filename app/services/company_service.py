@@ -25,11 +25,16 @@ class CompanyService(CRUDService):
     
     async def delete(self, id: UUID):
         company = await self.session.get(Company, id)
+        if company is None:
+            return
         await self.session.delete(company)
         await self.session.commit()
+        return id
     
     async def update(self, id: UUID, model_in: CompanyUpdate):
         company = await self.session.get(Company, id)
+        if company is None:
+            return
         if model_in.name is not None:
             company.name = model_in.name
         if model_in.hh_employer_id is not None:
