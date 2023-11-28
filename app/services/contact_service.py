@@ -1,6 +1,5 @@
 from uuid6 import UUID
 from fastapi import HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.services.crud_service import CRUDService
 from app.models.contact import Contact, ContactIn, ContactUpdate

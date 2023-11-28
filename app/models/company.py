@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlmodel import Field, SQLModel
+from sqlmodel import SQLModel
 from app.models.base_model import BaseModel
 
 

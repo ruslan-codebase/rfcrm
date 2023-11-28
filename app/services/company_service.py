@@ -1,5 +1,4 @@
 from uuid6 import UUID
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.services.crud_service import CRUDService
 from app.models.company import Company, CompanyIn, CompanyUpdate

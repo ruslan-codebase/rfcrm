@@ -1,5 +1,4 @@
 from pytest import mark
-from tests.fixtures import async_client
 from uuid6 import uuid6
 
 

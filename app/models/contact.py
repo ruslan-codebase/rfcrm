@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlmodel import Field, SQLModel
-from pydantic import PositiveInt, validator
+from pydantic import validator
 from uuid6 import UUID
 from app.models.base_model import BaseModel
 
@@ -59,7 +59,7 @@ class ContactUpdate(SQLModel):
         str_v = str(v)
 
         if type(v) is not int:
-            raise ValueError(f"Phone number is not an int")
+            raise ValueError("Phone number is not an int")
 
         if not str_v.startswith("7"):
             raise ValueError("Phone number must start with 7")

@@ -1,6 +1,5 @@
 import uvicorn
 from fastapi import FastAPI
-from app.db import db
 from app.routers import api_router
 
 app = FastAPI(

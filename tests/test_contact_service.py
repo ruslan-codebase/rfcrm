@@ -1,6 +1,5 @@
 from pytest import mark, raises
 from fastapi import HTTPException
-from tests.fixtures import async_session
 from uuid6 import uuid6
 from app.models.contact import Contact, ContactIn, ContactUpdate
 from app.services.contact_service import ContactService
@@ -143,6 +142,7 @@ async def test_update_contact(async_session):
                 firstname="John", patronymic="Ivanovich", phone_number=71112223344
             ),
         )
+        assert update3 == contact
         assert contact.firstname == "John"
         assert contact.patronymic == "Ivanovich"
         assert contact.phone_number == 71112223344

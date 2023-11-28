@@ -1,5 +1,4 @@
 from pytest import mark
-from tests.fixtures import async_session
 from uuid6 import uuid6
 from app.models.company import Company, CompanyIn, CompanyUpdate
 from app.services.company_service import CompanyService
@@ -106,13 +105,11 @@ async def test_update_company(async_session):
         assert company.name == "hellooo"
         assert company.hh_employer_id == "11111"
 
-        result2 = await service.update(
-            company.id, CompanyUpdate(hh_employer_id="12345")
-        )
+        _ = await service.update(company.id, CompanyUpdate(hh_employer_id="12345"))
         assert company.name == "hellooo"
         assert company.hh_employer_id == "12345"
 
-        result3 = await service.update(
+        _ = await service.update(
             company.id, CompanyUpdate(name="ducky", hh_employer_id="11111")
         )
         assert company.name == "ducky"

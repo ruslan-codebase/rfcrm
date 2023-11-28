@@ -15,20 +15,14 @@ async def test_contact_base():
 
     # phone too short
     with raises(ValueError):
-        bad_phone_model = ContactBase(
-            firstname="Ivan", lastname="Ivanov", phone_number=79999
-        )
+        _ = ContactBase(firstname="Ivan", lastname="Ivanov", phone_number=79999)
 
     # phone doesnt start with country code 7
     with raises(ValueError):
-        bad_phone_model2 = ContactBase(
-            firstname="Ivan", lastname="Ivanov", phone_number=19998882233
-        )
+        _ = ContactBase(firstname="Ivan", lastname="Ivanov", phone_number=19998882233)
 
     # phone oke
-    good_phone_number = ContactBase(
-        firstname="Ivan", lastname="Ivanov", phone_number=79997774422
-    )
+    _ = ContactBase(firstname="Ivan", lastname="Ivanov", phone_number=79997774422)
 
     # missing required field
     with raises(ValueError):
