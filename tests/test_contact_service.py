@@ -7,31 +7,22 @@ from app.services.contact_service import ContactService
 
 
 def simple_contact(suffix="") -> ContactIn:
-    return ContactIn(
-        firstname = f"Ivan{suffix}",
-        lastname = f"Ivanov{suffix}"
-    )
+    return ContactIn(firstname=f"Ivan{suffix}", lastname=f"Ivanov{suffix}")
+
 
 def contact_with_phone_number() -> ContactIn:
-    return ContactIn(
-        firstname = "Ivan",
-        lastname = "Ivanov",
-        phone_number = 79998887766
-    )
+    return ContactIn(firstname="Ivan", lastname="Ivanov", phone_number=79998887766)
+
 
 def company_contact(c_id) -> ContactIn:
-    return ContactIn(
-        firstname = "Ivan",
-        lastname = "Ivanov",
-        company_id = c_id
-    )
+    return ContactIn(firstname="Ivan", lastname="Ivanov", company_id=c_id)
 
 
 @mark.asyncio
 async def test_create_contact(async_session):
     async for s in async_session:
         service = ContactService(s)
-        
+
         before = await service.get()
         assert len(before) == 0
 
@@ -39,10 +30,11 @@ async def test_create_contact(async_session):
         assert type(result) is Contact
         assert result.id is not None
         assert result.created_at is not None
-        
+
         after = await service.get()
         assert len(after) == 1
         assert after[0].id == result.id
+
 
 @mark.asyncio
 async def test_get_contacts(async_session):
@@ -55,7 +47,7 @@ async def test_get_contacts(async_session):
 
         for i in range(22):
             _ = await service.create(simple_contact(suffix=str(i)))
-        
+
         default_limit = await service.get()
         assert len(default_limit) == 20
 
@@ -65,6 +57,7 @@ async def test_get_contacts(async_session):
         with_offset = await service.get(offset=2, limit=25)
         assert len(with_offset) == 20
         assert with_offset[0].firstname == "Ivan2"
+
 
 @mark.asyncio
 async def test_get_contact_by_id(async_session):
@@ -76,10 +69,11 @@ async def test_get_contact_by_id(async_session):
 
         assert type(result) is Contact
         assert result.id == contact.id
-        
+
         for field, value in contact.__dict__.items():
             assert getattr(result, field) == value
-        
+
+
 @mark.asyncio
 async def test_id_not_found(async_session):
     async for s in async_session:
@@ -88,18 +82,16 @@ async def test_id_not_found(async_session):
 
         with raises(HTTPException):
             await service.get_by_id(fakeid)
-        
+
         with raises(HTTPException):
             await service.delete(fakeid)
-        
+
         with raises(HTTPException):
-            await service.update(
-                fakeid,
-                ContactUpdate(telegram_name="siberian_bear")
-            )
-        
+            await service.update(fakeid, ContactUpdate(telegram_name="siberian_bear"))
+
         with raises(HTTPException):
             await service.create(company_contact(fakeid))
+
 
 @mark.asyncio
 async def test_delete_contact(async_session):
@@ -115,6 +107,7 @@ async def test_delete_contact(async_session):
 
         with raises(HTTPException):
             await service.get_by_id(contact.id)
+
 
 @mark.asyncio
 async def test_update_contact(async_session):
@@ -139,8 +132,7 @@ async def test_update_contact(async_session):
         assert contact.company_id is None
 
         update2 = await service.update(
-            contact.id,
-            ContactUpdate(telegram_name="epicIvan")
+            contact.id, ContactUpdate(telegram_name="epicIvan")
         )
         assert update2 == contact
         assert contact.telegram_name == "epicIvan"
@@ -148,10 +140,8 @@ async def test_update_contact(async_session):
         update3 = await service.update(
             contact.id,
             ContactUpdate(
-                firstname="John",
-                patronymic="Ivanovich",
-                phone_number=71112223344
-            )
+                firstname="John", patronymic="Ivanovich", phone_number=71112223344
+            ),
         )
         assert contact.firstname == "John"
         assert contact.patronymic == "Ivanovich"

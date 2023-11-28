@@ -7,10 +7,7 @@ from app.models.base_model import BaseModel
 
 @mark.asyncio
 async def test_contact_base():
-    model = ContactBase(
-        firstname = "Ivan",
-        lastname = "Ivanov"
-    )
+    model = ContactBase(firstname="Ivan", lastname="Ivanov")
     assert model.patronymic is None
     assert model.telegram_name is None
     assert model.phone_number is None
@@ -19,38 +16,30 @@ async def test_contact_base():
     # phone too short
     with raises(ValueError):
         bad_phone_model = ContactBase(
-            firstname = "Ivan",
-            lastname = "Ivanov",
-            phone_number = 79999
+            firstname="Ivan", lastname="Ivanov", phone_number=79999
         )
-    
+
     # phone doesnt start with country code 7
     with raises(ValueError):
         bad_phone_model2 = ContactBase(
-            firstname = "Ivan",
-            lastname = "Ivanov",
-            phone_number = 19998882233
+            firstname="Ivan", lastname="Ivanov", phone_number=19998882233
         )
 
     # phone oke
     good_phone_number = ContactBase(
-        firstname = "Ivan",
-        lastname = "Ivanov",
-        phone_number = 79997774422
+        firstname="Ivan", lastname="Ivanov", phone_number=79997774422
     )
 
     # missing required field
     with raises(ValueError):
-        _ = ContactBase(firstname = "Ivan",)
+        _ = ContactBase(
+            firstname="Ivan",
+        )
 
 
 @mark.asyncio
 async def test_contact_in():
-    model = ContactIn(
-        firstname="Ivan",
-        lastname="Ivanov",
-        telegram_name="super_ivan"
-    )
+    model = ContactIn(firstname="Ivan", lastname="Ivanov", telegram_name="super_ivan")
 
     assert not hasattr(model, "id")
 
@@ -64,7 +53,7 @@ async def test_contact_update():
     # phone too short
     with raises(ValueError):
         _ = ContactUpdate(phone_number=7000)
-    
+
     # phone doesnt start with 7
     with raises(ValueError):
         _ = ContactUpdate(phone_number=89993332211)
@@ -73,11 +62,12 @@ async def test_contact_update():
     with raises(ValueError):
         _ = ContactUpdate(phone_number="7hellofjjhh")
 
+
 @mark.asyncio
 async def test_contact():
     model = Contact(
-        firtname = "John",
-        lastname = "Doe",
+        firtname="John",
+        lastname="Doe",
     )
 
     assert hasattr(model, "id")
@@ -86,4 +76,3 @@ async def test_contact():
     assert type(model.created_at) is datetime
     assert issubclass(Contact, BaseModel)
     assert issubclass(Contact, ContactBase)
-

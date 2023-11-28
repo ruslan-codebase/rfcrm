@@ -18,4 +18,3 @@ async def test_root_route(async_client):
         assert resp.status_code == 200
         assert resp.json() == {"message": "Welcome to RFCRM"}
         await cl.aclose()
-

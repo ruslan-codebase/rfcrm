@@ -4,12 +4,9 @@ from app.db.base_database import Database
 
 
 class InMemSqliteDatabase(Database):
-
     def setup(self) -> None:
         sqliteurl = "sqlite+aiosqlite://"
         self.async_engine = create_async_engine(sqliteurl)
         self.async_sessionmaker = sessionmaker(
-            bind=self.async_engine,
-            class_=AsyncSession,
-            expire_on_commit=False
+            bind=self.async_engine, class_=AsyncSession, expire_on_commit=False
         )

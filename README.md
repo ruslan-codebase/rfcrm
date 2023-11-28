@@ -29,4 +29,3 @@ Running tests is as easy as
 ```
 $ docker-compose exec web poetry run pytest
 ```
-

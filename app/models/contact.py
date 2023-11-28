@@ -17,7 +17,7 @@ class ContactBase(SQLModel):
     def phone_validation(cls, v):
         if v is None:
             return
-        
+
         str_v = str(v)
 
         if type(v) is not int:
@@ -25,7 +25,7 @@ class ContactBase(SQLModel):
 
         if not str_v.startswith("7"):
             raise ValueError("Phone number must start with 7")
-        
+
         if len(str_v) != 11:
             # 1 digit country code
             # 3 digits region code
@@ -55,15 +55,15 @@ class ContactUpdate(SQLModel):
     def phone_validation(cls, v):
         if v is None:
             return
-        
+
         str_v = str(v)
 
         if type(v) is not int:
             raise ValueError(f"Phone number is not an int")
-        
+
         if not str_v.startswith("7"):
             raise ValueError("Phone number must start with 7")
-        
+
         if len(str_v) != 11:
             # 1 digit country code
             # 3 digits region code

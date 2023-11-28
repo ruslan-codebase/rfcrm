@@ -19,6 +19,7 @@ class Company(BaseModel, CompanyBase, table=True):
 class CompanyIn(CompanyBase):
     pass
 
+
 class CompanyUpdate(SQLModel):
     name: Optional[str]
     hh_employer_id: Optional[str]

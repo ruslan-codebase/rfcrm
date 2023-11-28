@@ -45,7 +45,7 @@ def run_migrations_offline() -> None:
 
     """
     url = settings.postgres_dsn
-    #url = config.get_main_option("sqlalchemy.url")
+    # url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -70,11 +70,7 @@ async def run_async_migrations() -> None:
 
     """
     connectable = AsyncEngine(
-        create_engine(
-            settings.postgres_dsn,
-            echo=True,
-            future=True
-        )
+        create_engine(settings.postgres_dsn, echo=True, future=True)
     )
     """connectable = async_engine_from_config(
         config.get_section(config.config_ini_section, {}),

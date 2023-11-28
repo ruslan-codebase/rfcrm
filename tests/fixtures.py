@@ -9,6 +9,7 @@ from app.main import app
 
 test_db = InMemSqliteDatabase()
 
+
 @fixture(scope="function")
 async def async_session() -> AsyncGenerator[AsyncSession, None]:
     await test_db.init_db()
