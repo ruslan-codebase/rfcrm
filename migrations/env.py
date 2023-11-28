@@ -9,6 +9,7 @@ from app.settings import settings
 
 # import sqlmodel models
 from app.models.company import Company
+from app.models.contact import Contact
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
