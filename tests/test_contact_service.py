@@ -1,4 +1,5 @@
-from pytest import mark
+from pytest import mark, raises
+from fastapi import HTTPException
 from tests.fixtures import async_session
 from uuid6 import uuid6
 from app.models.contact import Contact, ContactIn, ContactUpdate
@@ -85,19 +86,20 @@ async def test_id_not_found(async_session):
         service = ContactService(s)
         fakeid = uuid6()
 
-        get_result = await service.get_by_id(fakeid)
-        assert get_result is None
-
-        delete_result = await service.delete(fakeid)
-        assert delete_result is None
-
-        update_result = await service.update(
-            fakeid,
-            ContactUpdate(telegram_name="siberian_bear"))
-        assert update_result is None
-
-        create_result = await service.create(company_contact(fakeid))
-        assert create_result is None
+        with raises(HTTPException):
+            await service.get_by_id(fakeid)
+        
+        with raises(HTTPException):
+            await service.delete(fakeid)
+        
+        with raises(HTTPException):
+            await service.update(
+                fakeid,
+                ContactUpdate(telegram_name="siberian_bear")
+            )
+        
+        with raises(HTTPException):
+            await service.create(company_contact(fakeid))
 
 @mark.asyncio
 async def test_delete_contact(async_session):
@@ -111,8 +113,8 @@ async def test_delete_contact(async_session):
         delete_result = await service.delete(contact.id)
         assert delete_result == contact.id
 
-        after = await service.get_by_id(contact.id)
-        assert after is None
+        with raises(HTTPException):
+            await service.get_by_id(contact.id)
 
 @mark.asyncio
 async def test_update_contact(async_session):
