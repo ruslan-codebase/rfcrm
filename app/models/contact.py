@@ -10,12 +10,18 @@ class ContactBase(SQLModel):
     lastname: str
     patronymic: Optional[str]
     telegram_name: Optional[str]
-    phone_number: Optional[str]
+    phone_number: Optional[int]
     company_id: Optional[UUID] = Field(default=None, foreign_key="Company.id")
 
     @validator("phone_number")
     def phone_validation(cls, v):
+        if v is None:
+            return
+        
         str_v = str(v)
+
+        if type(v) is not int:
+            raise ValueError("Phone number is not an int")
 
         if not str_v.startswith("7"):
             raise ValueError("Phone number must start with 7")
@@ -42,14 +48,20 @@ class ContactUpdate(SQLModel):
     lastname: Optional[str]
     patronymic: Optional[str]
     telegram_name: Optional[str]
-    phone_number: Optional[str]
+    phone_number: Optional[int]
     company_id: Optional[UUID]
 
     @validator("phone_number")
     def phone_validation(cls, v):
+        if v is None:
+            return
+        
         str_v = str(v)
 
-        if not str_v.starts_with("7"):
+        if type(v) is not int:
+            raise ValueError(f"Phone number is not an int")
+        
+        if not str_v.startswith("7"):
             raise ValueError("Phone number must start with 7")
         
         if len(str_v) != 11:

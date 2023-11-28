@@ -1,7 +1,7 @@
 from pytest import mark, raises
 from uuid6 import UUID
 from datetime import datetime
-from app.models.contact import ContactBase, Contact, ContactIn
+from app.models.contact import ContactBase, Contact, ContactIn, ContactUpdate
 from app.models.base_model import BaseModel
 
 
@@ -50,6 +50,24 @@ async def test_contact_in():
 
     assert not hasattr(model, "id")
 
+
+@mark.asyncio
+async def test_contact_update():
+    model1 = ContactUpdate()
+    for field, value in model1.__dict__.items():
+        assert value is None
+
+    # phone too short
+    with raises(ValueError):
+        _ = ContactUpdate(phone_number=7000)
+    
+    # phone doesnt start with 7
+    with raises(ValueError):
+        _ = ContactUpdate(phone_number=89993332211)
+
+    # phone is not an int
+    with raises(ValueError):
+        _ = ContactUpdate(phone_number="7hellofjjhh")
 
 @mark.asyncio
 async def test_contact():
