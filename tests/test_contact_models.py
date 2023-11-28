@@ -39,6 +39,10 @@ async def test_contact_base():
         phone_number = 79997774422
     )
 
+    # missing required field
+    with raises(ValueError):
+        _ = ContactBase(firstname = "Ivan",)
+
 
 @mark.asyncio
 async def test_contact_in():
