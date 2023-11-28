@@ -1,4 +1,5 @@
-from pytest import mark
+from pytest import mark, raises
+from fastapi import HTTPException
 from uuid6 import uuid6
 from app.models.company import Company, CompanyIn, CompanyUpdate
 from app.services.company_service import CompanyService
@@ -42,15 +43,14 @@ async def test_company_not_found(async_session):
         service = CompanyService(s)
         fakeid = uuid6()
 
-        get_result = await service.get_by_id(fakeid)
-        assert get_result is None
+        with raises(HTTPException):
+            _ = await service.get_by_id(fakeid)
 
-        delete_result = await service.delete(fakeid)
-        assert delete_result is None
+        with raises(HTTPException):
+            _ = await service.delete(fakeid)
 
-        company_update = CompanyUpdate(name="newname")
-        update_result = await service.update(fakeid, company_update)
-        assert update_result is None
+        with raises(HTTPException):
+            _ = await service.update(fakeid, CompanyUpdate(name="newname"))
 
 
 @mark.asyncio
@@ -87,8 +87,8 @@ async def test_delete_company(async_session):
         delete_result = await service.delete(company.id)
         assert delete_result == company.id
 
-        result2 = await service.get_by_id(company.id)
-        assert result2 is None
+        with raises(HTTPException):
+            _ = await service.get_by_id(company.id)
 
 
 @mark.asyncio

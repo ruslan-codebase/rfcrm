@@ -1,5 +1,6 @@
 from uuid6 import UUID
 from sqlalchemy import select
+from fastapi import HTTPException
 from app.services.crud_service import CRUDService
 from app.models.company import Company, CompanyIn, CompanyUpdate
 
@@ -11,6 +12,10 @@ class CompanyService(CRUDService):
 
     async def get_by_id(self, id: UUID):
         company = await self.session.get(Company, id)
+        if company is None:
+            raise HTTPException(
+                status_code=404, detail="Company not found with given id"
+            )
         return company
 
     async def create(self, model_in: CompanyIn):
@@ -23,7 +28,9 @@ class CompanyService(CRUDService):
     async def delete(self, id: UUID):
         company = await self.session.get(Company, id)
         if company is None:
-            return
+            raise HTTPException(
+                status_code=404, detail="Company not found with given id"
+            )
         await self.session.delete(company)
         await self.session.commit()
         return id
@@ -31,7 +38,9 @@ class CompanyService(CRUDService):
     async def update(self, id: UUID, model_in: CompanyUpdate):
         company = await self.session.get(Company, id)
         if company is None:
-            return
+            raise HTTPException(
+                status_code=404, detail="Company not found with given id"
+            )
         if model_in.name is not None:
             company.name = model_in.name
         if model_in.hh_employer_id is not None:
