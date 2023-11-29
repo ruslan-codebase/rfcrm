@@ -41,7 +41,7 @@ async def add_contact(
     return contact
 
 
-@router.put("/{contact_id}")
+@router.put("/{contact_id}", status_code=200)
 async def update_contact(
     contact_id: UUID,
     contact_update: ContactUpdate,
@@ -55,7 +55,7 @@ async def update_contact(
     return contact
 
 
-@router.delete("/{contact_id}")
+@router.delete("/{contact_id}", status_code=204)
 async def delete_contact(
     contact_id: UUID, session: AsyncSession = Depends(db.get_session)
 ):
@@ -63,5 +63,3 @@ async def delete_contact(
 
     if cid is None:
         raise HTTPException(status_code=404, detail="Contact not found with given id")
-
-    return {"message": "successfully deleted"}

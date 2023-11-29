@@ -123,8 +123,7 @@ async def test_delete_contact(async_client):
         assert get1.json().get("firstname") == "Jack"
 
         resp = await client.delete(f"/api/contacts/{contact_id}")
-        assert resp.status_code == 200
-        assert resp.json().get("message") == "successfully deleted"
+        assert resp.status_code == 204
 
         get2 = await client.get(f"/api/contacts/{contact_id}")
         assert get2.status_code == 404

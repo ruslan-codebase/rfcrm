@@ -7,7 +7,7 @@ async def test_create_company(async_client):
     async for client in async_client:
         company_in = {"name": "VK", "hh_employer_id": "22222"}
         resp = await client.post("/api/companies/", json=company_in)
-        assert resp.status_code == 200
+        assert resp.status_code == 201
         data = resp.json().get("data")
         for k, v in company_in.items():
             assert data.get(k) == v
@@ -26,7 +26,7 @@ async def test_create_company_bad_request(async_client):
             "something": "very interesting",
         }
         resp2 = await client.post("/api/companies/", json=extra_field)
-        assert resp2.status_code == 200
+        assert resp2.status_code == 201
 
 
 @mark.asyncio
@@ -68,8 +68,7 @@ async def test_delete_company(async_client):
         assert data.get("id") == company_id
         assert data.get("name") == "Tinkoff"
         resp1 = await client.delete(f"/api/companies/{company_id}")
-        assert resp1.status_code == 200
-        assert resp1.json().get("message") == "successfully deleted"
+        assert resp1.status_code == 204
         get_resp2 = await client.get(f"/api/companies/{company_id}")
         assert get_resp2.status_code == 404
 

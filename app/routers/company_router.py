@@ -8,13 +8,13 @@ from app.models.company import CompanyIn, CompanyUpdate
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", status_code=200)
 async def get_companies(session: AsyncSession = Depends(db.get_session)):
     companies = await CompanyService(session).get()
     return {"data": companies, "message": ""}
 
 
-@router.get("/{company_id}")
+@router.get("/{company_id}", status_code=200)
 async def get_company_by_id(
     company_id: UUID, session: AsyncSession = Depends(db.get_session)
 ):
@@ -26,7 +26,7 @@ async def get_company_by_id(
     return {"data": company, "message": ""}
 
 
-@router.post("/")
+@router.post("/", status_code=201)
 async def add_company(
     company_in: CompanyIn, session: AsyncSession = Depends(db.get_session)
 ):
@@ -34,7 +34,7 @@ async def add_company(
     return {"data": company, "message": ""}
 
 
-@router.put("/{company_id}")
+@router.put("/{company_id}", status_code=200)
 async def update_company(
     company_id: UUID,
     company_update: CompanyUpdate,
@@ -48,7 +48,7 @@ async def update_company(
     return {"data": company, "message": ""}
 
 
-@router.delete("/{company_id}")
+@router.delete("/{company_id}", status_code=204)
 async def delete_company(
     company_id: UUID, session: AsyncSession = Depends(db.get_session)
 ):
@@ -56,5 +56,3 @@ async def delete_company(
 
     if cid is None:
         raise HTTPException(status_code=404, detail="Company not found with given id")
-
-    return {"data": "", "message": "successfully deleted"}
