@@ -1,6 +1,7 @@
-from pytest import mark, raises
 from fastapi import HTTPException
+from pytest import mark, raises
 from uuid6 import uuid6
+
 from app.models.company import Company, CompanyIn, CompanyUpdate
 from app.services.company_service import CompanyService
 

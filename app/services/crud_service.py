@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from uuid6 import UUID
+
 from sqlalchemy.ext.asyncio import AsyncSession
+from uuid6 import UUID
 
 
 class CRUDService(ABC):

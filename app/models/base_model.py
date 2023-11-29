@@ -1,8 +1,9 @@
-from typing import Optional
-from uuid6 import uuid6, UUID
-from sqlmodel import SQLModel, Field
-from sqlalchemy.orm import declared_attr
 from datetime import datetime
+from typing import Optional
+
+from sqlalchemy.orm import declared_attr
+from sqlmodel import Field, SQLModel
+from uuid6 import UUID, uuid6
 
 
 class BaseModel(SQLModel):

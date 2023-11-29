@@ -1,9 +1,10 @@
-from uuid6 import UUID
 from fastapi import HTTPException
 from sqlalchemy import select
-from app.services.crud_service import CRUDService
-from app.models.contact import Contact, ContactIn, ContactUpdate
+from uuid6 import UUID
+
 from app.models.company import Company
+from app.models.contact import Contact, ContactIn, ContactUpdate
+from app.services.crud_service import CRUDService
 
 
 class ContactService(CRUDService):

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
-from uuid6 import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db import db
-from app.services.contact_service import ContactService
-from app.models.contact import ContactIn, ContactUpdate, Contact
+from uuid6 import UUID
 
+from app.db import db
+from app.models.contact import Contact, ContactIn, ContactUpdate
+from app.services.contact_service import ContactService
 
 router = APIRouter()
 

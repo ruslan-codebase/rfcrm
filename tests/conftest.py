@@ -1,11 +1,12 @@
-from pytest import fixture
-from httpx import AsyncClient
 from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.in_mem_sqlite_database import InMemSqliteDatabase
-from app.db import db
-from app.main import app
 
+from httpx import AsyncClient
+from pytest import fixture
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.db import db
+from app.db.in_mem_sqlite_database import InMemSqliteDatabase
+from app.main import app
 
 test_db = InMemSqliteDatabase()
 

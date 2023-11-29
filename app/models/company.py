@@ -1,5 +1,7 @@
 from typing import Optional
+
 from sqlmodel import SQLModel
+
 from app.models.base_model import BaseModel
 
 

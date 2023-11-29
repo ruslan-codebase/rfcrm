@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from pytest import mark, raises
 from uuid6 import UUID
-from datetime import datetime
-from app.models.contact import ContactBase, Contact, ContactIn, ContactUpdate
+
 from app.models.base_model import BaseModel
+from app.models.contact import Contact, ContactBase, ContactIn, ContactUpdate
 
 
 @mark.asyncio

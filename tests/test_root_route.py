@@ -1,6 +1,8 @@
-from pytest import mark, fixture
-from httpx import AsyncClient
 from typing import AsyncGenerator
+
+from httpx import AsyncClient
+from pytest import fixture, mark
+
 from app.main import app
 
 

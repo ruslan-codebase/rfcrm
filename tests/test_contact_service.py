@@ -1,6 +1,7 @@
-from pytest import mark, raises
 from fastapi import HTTPException
+from pytest import mark, raises
 from uuid6 import uuid6
+
 from app.models.contact import Contact, ContactIn, ContactUpdate
 from app.services.contact_service import ContactService
 

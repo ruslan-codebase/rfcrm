@@ -1,7 +1,9 @@
 from typing import Optional
-from sqlmodel import Field, SQLModel
+
 from pydantic import validator
+from sqlmodel import Field, SQLModel
 from uuid6 import UUID
+
 from app.models.base_model import BaseModel
 
 
