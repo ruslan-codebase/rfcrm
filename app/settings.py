@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_DRIVER: str = "asyncpg"
     POSTGRES_PORT: str = "5432"
+    JWT_SECRET: str
+    JWT_ALGORITHM: str = "HS256"
+    JWT_LIFETIME_IN_MINUTES: int = 15
 
     @property
     def postgres_dsn(self) -> PostgresDsn:
