@@ -54,7 +54,7 @@ async def test_get_logged_in_user(async_session):
         user = await service.register(user_in)
         token = await service.login(user_in, timedelta(microseconds=1))
 
-        time.sleep(0.5)
+        time.sleep(2)
 
         # expired
         with raises(HTTPException):

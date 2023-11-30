@@ -29,3 +29,19 @@ Running tests is as easy as
 ```
 $ docker-compose exec web poetry run pytest
 ```
+
+## Test coverage
+
+You might want to run tests with coverage. coverage.py package makes it very easy.
+
+```
+$ docker-compose exec web poetry run coverage run -m pytest
+```
+
+View the report like so:
+
+```
+$ docker-compose exec web poetry run coverage report
+```
+
+For alternative reports (HTML,XML,json, etc) read the coverage.py official documentation.
