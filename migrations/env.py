@@ -10,6 +10,7 @@ from sqlmodel import SQLModel, create_engine
 # import sqlmodel models
 from app.models.company import Company
 from app.models.contact import Contact
+from app.models.user import User
 from app.settings import settings
 
 # this is the Alembic Config object, which provides
