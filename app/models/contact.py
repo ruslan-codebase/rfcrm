@@ -32,6 +32,10 @@ class PhoneBase(SQLModel):
         return v
 
 
+class CreatorBase(SQLModel):
+    created_by: str
+
+
 class ContactBase(SQLModel):
     firstname: str
     lastname: str
@@ -40,7 +44,7 @@ class ContactBase(SQLModel):
     company_id: Optional[UUID] = Field(default=None, foreign_key="Company.id")
 
 
-class Contact(BaseModel, ContactBase, PhoneBase, table=True):
+class Contact(BaseModel, CreatorBase, ContactBase, PhoneBase, table=True):
     pass
 
 

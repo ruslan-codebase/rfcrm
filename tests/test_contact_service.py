@@ -22,16 +22,17 @@ def company_contact(c_id) -> ContactIn:
 async def test_create_contact(async_session):
     async for s in async_session:
         service = ContactService(s)
+        fake_email = "john.doe@gmail.com"
 
-        before = await service.get()
+        before = await service.get(fake_email)
         assert len(before) == 0
 
-        result = await service.create(simple_contact())
+        result = await service.create(simple_contact(), fake_email)
         assert type(result) is Contact
         assert result.id is not None
         assert result.created_at is not None
 
-        after = await service.get()
+        after = await service.get(fake_email)
         assert len(after) == 1
         assert after[0].id == result.id
 
@@ -40,21 +41,22 @@ async def test_create_contact(async_session):
 async def test_get_contacts(async_session):
     async for s in async_session:
         service = ContactService(s)
+        fake_email = "john.doe@gmail.com"
 
-        empty = await service.get()
+        empty = await service.get(fake_email)
         assert type(empty) is list
         assert len(empty) == 0
 
         for i in range(22):
-            _ = await service.create(simple_contact(suffix=str(i)))
+            _ = await service.create(simple_contact(suffix=str(i)), fake_email)
 
-        default_limit = await service.get()
+        default_limit = await service.get(fake_email)
         assert len(default_limit) == 20
 
-        get_all = await service.get(limit=30)
+        get_all = await service.get(fake_email, limit=30)
         assert len(get_all) == 22
 
-        with_offset = await service.get(offset=2, limit=25)
+        with_offset = await service.get(fake_email, offset=2, limit=25)
         assert len(with_offset) == 20
         assert with_offset[0].firstname == "Ivan2"
 
@@ -63,9 +65,10 @@ async def test_get_contacts(async_session):
 async def test_get_contact_by_id(async_session):
     async for s in async_session:
         service = ContactService(s)
+        fake_email = "john.doe@gmail.com"
 
-        contact = await service.create(contact_with_phone_number())
-        result = await service.get_by_id(contact.id)
+        contact = await service.create(contact_with_phone_number(), fake_email)
+        result = await service.get_by_id(contact.id, fake_email)
 
         assert type(result) is Contact
         assert result.id == contact.id
@@ -79,41 +82,46 @@ async def test_id_not_found(async_session):
     async for s in async_session:
         service = ContactService(s)
         fakeid = uuid6()
+        fake_email = "john.doe@gmail.com"
 
         with raises(HTTPException):
-            await service.get_by_id(fakeid)
+            await service.get_by_id(fakeid, fake_email)
 
         with raises(HTTPException):
-            await service.delete(fakeid)
+            await service.delete(fakeid, fake_email)
 
         with raises(HTTPException):
-            await service.update(fakeid, ContactUpdate(telegram_name="siberian_bear"))
+            await service.update(
+                fakeid, fake_email, ContactUpdate(telegram_name="siberian_bear")
+            )
 
         with raises(HTTPException):
-            await service.create(company_contact(fakeid))
+            await service.create(company_contact(fakeid), fake_email)
 
 
 @mark.asyncio
 async def test_delete_contact(async_session):
     async for s in async_session:
         service = ContactService(s)
-        contact = await service.create(simple_contact())
+        fake_email = "john.doe@gmail.com"
+        contact = await service.create(simple_contact(), fake_email)
 
-        before = await service.get_by_id(contact.id)
+        before = await service.get_by_id(contact.id, fake_email)
         assert before == contact
 
-        delete_result = await service.delete(contact.id)
+        delete_result = await service.delete(contact.id, fake_email)
         assert delete_result == contact.id
 
         with raises(HTTPException):
-            await service.get_by_id(contact.id)
+            await service.get_by_id(contact.id, fake_email)
 
 
 @mark.asyncio
 async def test_update_contact(async_session):
     async for s in async_session:
         service = ContactService(s)
-        contact = await service.create(contact_with_phone_number())
+        fake_email = "john.doe@gmail.com"
+        contact = await service.create(contact_with_phone_number(), fake_email)
 
         assert contact.firstname == "Ivan"
         assert contact.lastname == "Ivanov"
@@ -122,7 +130,7 @@ async def test_update_contact(async_session):
         assert contact.telegram_name is None
         assert contact.company_id is None
 
-        update1 = await service.update(contact.id, ContactUpdate())
+        update1 = await service.update(contact.id, fake_email, ContactUpdate())
         assert update1 == contact
         assert contact.firstname == "Ivan"
         assert contact.lastname == "Ivanov"
@@ -132,13 +140,14 @@ async def test_update_contact(async_session):
         assert contact.company_id is None
 
         update2 = await service.update(
-            contact.id, ContactUpdate(telegram_name="epicIvan")
+            contact.id, fake_email, ContactUpdate(telegram_name="epicIvan")
         )
         assert update2 == contact
         assert contact.telegram_name == "epicIvan"
 
         update3 = await service.update(
             contact.id,
+            fake_email,
             ContactUpdate(
                 firstname="John", patronymic="Ivanovich", phone_number=71112223344
             ),

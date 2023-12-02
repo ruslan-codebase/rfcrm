@@ -10,6 +10,7 @@ from app.models.contact import (
     ContactIn,
     ContactOut,
     ContactUpdate,
+    CreatorBase,
     PhoneBase,
 )
 
@@ -52,6 +53,17 @@ async def test_contact_phone_base():
 
 
 @mark.asyncio
+async def test_creator_base():
+    fake_email = "john.doe@mail.com"
+
+    with raises(ValueError):
+        _ = CreatorBase(created_by=None)
+
+    model = CreatorBase(created_by=fake_email)
+    assert model.created_by == fake_email
+
+
+@mark.asyncio
 async def test_contact_in():
     model = ContactIn(firstname="Ivan", lastname="Ivanov", telegram_name="super_ivan")
 
@@ -79,13 +91,12 @@ async def test_contact_update():
 
 @mark.asyncio
 async def test_contact():
-    model = Contact(
-        firtname="John",
-        lastname="Doe",
-    )
+    fake_email = "john.doe@gmail.com"
+    model = Contact(firtname="John", lastname="Doe", created_by=fake_email)
 
     assert hasattr(model, "id")
     assert hasattr(model, "created_at")
+    assert model.created_by == fake_email
     assert type(model.id) is UUID
     assert type(model.created_at) is datetime
     assert issubclass(Contact, BaseModel)
@@ -105,7 +116,10 @@ async def test_contact_out():
     assert model.company_url is None
 
     fakeid = uuid6()
-    contact = Contact(firstname="John", lastname="Doe", company_id=fakeid)
+    fake_email = "john.doe@gmail.com"
+    contact = Contact(
+        firstname="John", lastname="Doe", company_id=fakeid, created_by=fake_email
+    )
     contact_out = ContactOut.from_contact(contact)
 
     assert contact_out.firstname == "John"
@@ -113,3 +127,4 @@ async def test_contact_out():
     assert contact_out.company_url == f"/api/companies/{fakeid}"
     assert contact_out.id == contact.id
     assert contact_out.created_at == contact.created_at
+    assert not hasattr(contact_out, "created_by")
