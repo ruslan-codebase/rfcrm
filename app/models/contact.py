@@ -5,6 +5,7 @@ from sqlmodel import Field, SQLModel
 from uuid6 import UUID
 
 from app.models.base_model import BaseModel
+from app.models.creator_base import CreatorBase
 
 
 class PhoneBase(SQLModel):
@@ -30,10 +31,6 @@ class PhoneBase(SQLModel):
             raise ValueError("Phone number must be 11 digits long.")
 
         return v
-
-
-class CreatorBase(SQLModel):
-    created_by: str
 
 
 class ContactBase(SQLModel):

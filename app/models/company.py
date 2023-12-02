@@ -3,10 +3,7 @@ from typing import Optional
 from sqlmodel import SQLModel
 
 from app.models.base_model import BaseModel
-
-
-class CreatorBase(SQLModel):
-    created_by: str
+from app.models.creator_base import CreatorBase
 
 
 class CompanyBase(SQLModel):
