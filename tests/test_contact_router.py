@@ -32,8 +32,12 @@ async def test_create_contact(async_client):
         }
         resp3 = await client.post("/api/contacts/", json=with_company)
         assert resp3.status_code == 201
-        for k, v in with_company.items():
-            assert resp3.json().get(k) == v
+        assert resp3.json().get("firstname") == "Ivan"
+        assert resp3.json().get("lastname") == "Ivanov"
+        assert (
+            resp3.json().get("company_url")
+            == f"/api/companies/{company_data.get('id')}"
+        )
 
 
 @mark.asyncio

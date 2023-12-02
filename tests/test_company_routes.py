@@ -11,6 +11,8 @@ async def test_create_company(async_client):
         data = resp.json().get("data")
         for k, v in company_in.items():
             assert data.get(k) == v
+        assert data.get("id") is not None
+        assert data.get("created_at") is not None
 
 
 @mark.asyncio
