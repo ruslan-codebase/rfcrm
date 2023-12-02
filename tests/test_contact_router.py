@@ -7,15 +7,15 @@ async def login_user(client):
     login_data = {"username": user_in.get("email"), "password": user_in.get("password")}
     _ = await client.post("/api/users/register", json=user_in)
     logged_in = await client.post("/api/users/login", data=login_data)
-    return logged_in.json().get("jwt")
+    token = logged_in.json().get("jwt")
+    return {"Authorization": f"Bearer {token}"}
 
 
 @mark.asyncio
 async def test_create_contact(async_client):
     async for client in async_client:
         contact_in = {"firstname": "John", "lastname": "Ivanov"}
-        token = await login_user(client)
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = await login_user(client)
         resp = await client.post("/api/contacts/", json=contact_in, headers=headers)
         assert resp.status_code == 201
         for k, v in contact_in.items():
@@ -35,12 +35,13 @@ async def test_create_contact(async_client):
             assert resp2.json().get(k) == v
 
         company_in = {"name": "Yandex", "hh_employer_id": "22223"}
-        company_resp = await client.post("/api/companies/", json=company_in)
-        company_data = company_resp.json().get("data")
+        company_resp = await client.post(
+            "/api/companies/", json=company_in, headers=headers
+        )
         with_company = {
             "firstname": "Ivan",
             "lastname": "Ivanov",
-            "company_id": company_data.get("id"),
+            "company_id": company_resp.json().get("id"),
         }
         resp3 = await client.post("/api/contacts/", json=with_company, headers=headers)
         assert resp3.status_code == 201
@@ -48,7 +49,7 @@ async def test_create_contact(async_client):
         assert resp3.json().get("lastname") == "Ivanov"
         assert (
             resp3.json().get("company_url")
-            == f"/api/companies/{company_data.get('id')}"
+            == f"/api/companies/{company_resp.json().get('id')}"
         )
 
 
@@ -56,8 +57,7 @@ async def test_create_contact(async_client):
 async def test_create_contact_bad_request(async_client):
     async for client in async_client:
         missing_field = {"firsname": "Boris"}
-        token = await login_user(client)
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = await login_user(client)
         resp0 = await client.post("/api/contacts/", json=missing_field, headers=headers)
         assert resp0.status_code == 422
 
@@ -93,8 +93,7 @@ async def test_create_contact_bad_request(async_client):
 @mark.asyncio
 async def test_get_contacts(async_client):
     async for client in async_client:
-        token = await login_user(client)
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = await login_user(client)
         resp = await client.get("/api/contacts/", headers=headers)
         assert resp.status_code == 200
         assert resp.json() == []
@@ -116,8 +115,7 @@ async def test_get_contacts(async_client):
 async def test_get_contact_by_id(async_client):
     async for client in async_client:
         fakeid = uuid6()
-        token = await login_user(client)
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = await login_user(client)
         resp0 = await client.get(f"/api/contacts/{fakeid}", headers=headers)
         assert resp0.status_code == 404
 
@@ -138,8 +136,7 @@ async def test_get_contact_by_id(async_client):
 @mark.asyncio
 async def test_delete_contact(async_client):
     async for client in async_client:
-        token = await login_user(client)
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = await login_user(client)
         notfound = await client.delete(f"/api/contacts/{str(uuid6())}", headers=headers)
         assert notfound.status_code == 404
 
