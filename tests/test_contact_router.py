@@ -35,12 +35,13 @@ async def test_create_contact(async_client):
             assert resp2.json().get(k) == v
 
         company_in = {"name": "Yandex", "hh_employer_id": "22223"}
-        company_resp = await client.post("/api/companies/", json=company_in)
-        company_data = company_resp.json().get("data")
+        company_resp = await client.post(
+            "/api/companies/", json=company_in, headers=headers
+        )
         with_company = {
             "firstname": "Ivan",
             "lastname": "Ivanov",
-            "company_id": company_data.get("id"),
+            "company_id": company_resp.json().get("id"),
         }
         resp3 = await client.post("/api/contacts/", json=with_company, headers=headers)
         assert resp3.status_code == 201
@@ -48,7 +49,7 @@ async def test_create_contact(async_client):
         assert resp3.json().get("lastname") == "Ivanov"
         assert (
             resp3.json().get("company_url")
-            == f"/api/companies/{company_data.get('id')}"
+            == f"/api/companies/{company_resp.json().get('id')}"
         )
 
 
