@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, BackgroundTasks, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import db
@@ -12,10 +12,13 @@ router = APIRouter()
 
 @router.get("/update-companies", status_code=202)
 async def update_companies(
-    session: AsyncSession = Depends(db.get_session), token: str = Depends(oauth2_scheme)
+    background_tasks: BackgroundTasks,
+    session: AsyncSession = Depends(db.get_session),
+    token: str = Depends(oauth2_scheme),
 ):
     user = await UserService(session).get_logged_in_user(token)
     company_service = CompanyService(session)
-    await HHService(session, company_service).create_companies_from_vacancy_search(
-        user.email, text="python"
+    hh_service = HHService(session, company_service)
+    background_tasks.add_task(
+        hh_service.create_companies_from_vacancy_search, user.email, text="python"
     )

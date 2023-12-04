@@ -29,7 +29,6 @@ class HHService:
             for vacancy in resp.json().get("items"):
                 name = vacancy.get("employer").get("name")
                 hh_id = vacancy.get("employer").get("id")
-                print(f"hh_id: {hh_id}, name: {name}")
                 result = await self.session.execute(
                     select(Company).where(Company.hh_employer_id == hh_id)
                 )
