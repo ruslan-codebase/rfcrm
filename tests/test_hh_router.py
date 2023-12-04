@@ -1,6 +1,23 @@
 from pytest import mark
 
 
+class MockResponse:
+    def __init__(self, status_code, name="Yandex", id="12874"):
+        self.status_code = status_code
+        self.id = id
+        self.name = name
+
+    def json(self):
+        return {"items": [{"employer": {"id": self.id, "name": self.name}}]}
+
+
+def get_page_mock(url, page=0, text="python"):
+    if page == 0:
+        return MockResponse(200)
+    else:
+        return MockResponse(404)
+
+
 async def login_user(client):
     user_in = {"email": "ivan.ivanov@mail.ru", "password": "Somepass333$"}
     login_data = {"username": "ivan.ivanov@mail.ru", "password": "Somepass333$"}
@@ -11,7 +28,8 @@ async def login_user(client):
 
 
 @mark.asyncio
-async def test_create_companies_from_vacancy_search(async_client):
+async def test_create_companies_from_vacancy_search(async_client, mocker):
+    mocker.patch("app.services.hh_service.get_page", side_effect=get_page_mock)
     async for client in async_client:
         headers = await login_user(client)
 
